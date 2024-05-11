@@ -1,6 +1,6 @@
 <template>
   <div name="calculate">
-    <el-card style="width=100%">
+    <el-card style="width: 100%">
       <div slot="header">
         <span>自助计算</span>
       </div>

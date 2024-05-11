@@ -1,52 +1,106 @@
 <template>
-    <div name="passwordModify">
-        <el-form ref="form" :model="form" label-width="80px">
-            <el-form-item label="旧密码">
-                <el-input v-model="form.oldPassword" show-password></el-input>
-            </el-form-item>
-            <el-form-item label="新密码">
-                <el-input v-model="form.newPassword" show-password></el-input>
-            </el-form-item>
-            <el-form-item label="确认密码">
-                <el-input v-model="form.confirmPassword" show-password></el-input>
-            </el-form-item>
-            <el-form-item>
-                <el-button type="primary" @click="submitForm">提交</el-button>
-            </el-form-item>
-        </el-form>
+  <!-- e:/zy_zddx_top_ele/src/components/Password.vue -->
+  <div>
+    <el-button type="primary" @click="dialog = true" v-show="!dialog"
+      >修改密码</el-button
+    >
 
-    </div>
+    <el-card style="width: 100%" v-if="dialog">
+      <el-form :model="passWord" ref="passwordModify" @submit.native.prevent>
+        <el-form-item
+          label="*旧密码:"
+          prop="oldPassword"
+          style="width: max-content"
+          :rules="[{ required: true, message: '旧密码不能为空' }]"
+        >
+          <el-input v-model="passWord.oldPassword" type="password"></el-input>
+        </el-form-item>
+
+        <el-form-item
+          label="*新密码:"
+          prop="newPassword"
+          style="width: max-content"
+          :rules="[
+            { required: true, message: '新密码不能为空' },
+            { min: 6, message: '新密码长度不能少于6位' },
+          ]"
+        >
+          <el-input v-model="passWord.newPassword" type="password"></el-input>
+        </el-form-item>
+
+        <el-form-item
+          label="*确认密码:"
+          prop="confirmPassword"
+          style="width: max-content"
+          :rules="[
+            { required: true, message: '确认密码不能为空' },
+            { validator: validatePass, trigger: 'blur' },
+          ]"
+        >
+          <el-input
+            v-model="passWord.confirmPassword"
+            type="password"
+          ></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="submitForm">提交</el-button>
+          <el-button type="primary" @click="cancelForm">取消</el-button>
+        </el-form-item>
+      </el-form>
+    </el-card>
+  </div>
 </template>
 
 <script>
+import axios from "axios";
 export default {
-    name: 'PasswordContent',
-    data() {
-        return {
-            form: {
-                oldPassword: '',
-                newPassword: '',
-                confirmPassword: ''
-            }
-        }
-    },
-    methods: {
-        submitForm() {
-            if (this.form.newPassword != this.form.confirmPassword) {
-                this.$message.error('两次密码输入不一致')
-                return
-            }
-            this.$axios({
-                method: 'post',
-                url: '/',
-                data: this.form 
-            }).then((res) => {
-                if (res.data == 1) {
-                    this.$message.success('修改成功')
-                } else {
-                    this.$message.error('修改失败')
-                }
+  name: "PasswordContent",
+  data() {
+    return {
+      passWord: {
+        route: "passwordSubmit",
+        oldPassword: "",
+        newPassword: "",
+        confirmPassword: "",
+      },
+      dialog: false,
+    };
+  },
+  methods: {
+    submitForm() {
+      this.$refs.passwordModify.validate((valid) => {
+        if (valid) {
+          axios
+            .post("/" + this.passWord.route, this.passWord)
+            .then((response) => {
+              if (response.data.code === 200) {
+                this.$message({
+                  message: "密码修改成功",
+                  type: "success",
+                });
+                this.dialog = false;
+              } else if (response.data.code === 400) {
+                this.$message.error(response.data.message);
+              }
             })
+            .catch((error) => {
+              this.$message.error(error);
+            });
+        } else {
+          return false;
         }
-    }
-}
+      });
+    },
+    validatePass(rule, value, callback) {
+      if (value !== this.passWord.newPassword) {
+        callback(new Error("两次输入密码不一致!"));
+      } else {
+        callback();
+      }
+    },
+    cancelForm() {
+      this.dialog = false;
+    },
+  },
+};
+</script>

@@ -1,8 +1,11 @@
 <template>
     <div>
-
+        <el-button @click="inquiry" type="primary" style="margin-left: 16px;" v-show="!showFlag.emptybox">
+            查询志愿信息
+          </el-button>
         <div name="reportingData" v-show="showFlag.reportingData">
             <h1>欢迎使用陌鼓志愿填报</h1>
+        
             <h5>请如实填写以下信息，以便我们为你推荐志愿</h5>
             <el-form name="Reporting" :model="Reporting" :rules="rules.UserFormRules" ref="Reporting"
                 @submit.native.prevent="submitForm">
@@ -196,7 +199,6 @@
 
 
 <script>
-// 引入子组件
 
 
 import { UserFormRules } from '@/datas/validationRules.js';
@@ -251,8 +253,8 @@ export default {
             ],
             showFlag: {
                 reportingData: false,
-                reporting: true,
-                emptybox: false
+                reporting: false,
+                emptybox: true,
             },
             searchCity: {
                 inputValue: "",
@@ -301,7 +303,27 @@ export default {
     },
 
     // 方法
-    methods: {
+    methods: { 
+        inquiry() {
+        axios.post("/", this.Reporting)
+            .then((res) => {
+                if (res.data.code === 1) {
+                    this.showFlag.reportingData = true;
+                    this.showFlag.reporting = false;
+                } else if (res.data.code === 4) {
+                    this.showFlag.reportingData = false;
+                    this.showFlag.personal = true;
+                } else {
+                    this.showFlag.emptybox = true;
+                    this.showFlag.reporting = false;
+                    this.showFlag.reportingData = false;
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            });
+
+    },
         handleSearchCity(query, showFlag) {
             this.searchCity.showFlag[showFlag] = true;
 
@@ -332,7 +354,6 @@ export default {
             this.searchCollege.showFlag[id] = false;
         },
         submitForm() {
-            console.log(this.Reporting);
             for (const key in this.Reporting) {
                 if (!this.Reporting[key]) {
                     this.$message.error({
@@ -360,25 +381,6 @@ export default {
             }
         }
     },
-    mounted() {
-        axios.post("/", this.Reporting)
-            .then((res) => {
-                if (res.data.code === 1) {
-                    this.showFlag.reportingData = true;
-                    this.showFlag.reporting = false;
-                } else if (res.data.code === 4) {
-                    this.showFlag.reportingData = false;
-                    this.showFlag.personal = true;
-                } else {
-                    this.showFlag.emptybox = true;
-                    this.showFlag.reporting = false;
-                    this.showFlag.reportingData = false;
-                }
-            })
-            .catch(error => {
-                console.error(error);
-            });
-
-    }
+   
 }
 </script>

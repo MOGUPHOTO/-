@@ -85,43 +85,18 @@
         </el-aside>
 
         <el-main>
-          <div id="college" v-show="showFlag.college">
-            <College />
-          </div>
-          <div id="swiper" v-show="showFlag.swiper">
-            <SwipperImg />
-          </div>
-          <div id="uerinfoget"></div>
-          <div id="major" v-show="showFlag.major">
-            <Major />
-          </div>
-          <div id="hot" v-show="showFlag.hot">
-            <Hot />
-          </div>
-          <div id="mbti" v-show="showFlag.mbti">
-            <MBTI />
-          </div>
-          <div id="plan" v-show="showFlag.plan">
-            <Plan />
-          </div>
-          <div id="reporting" v-show="showFlag.reporting">
-            <Reporting />
-          </div>
-          <div id="news" v-show="showFlag.news">
-            <News />
-          </div>
-          <div id="calculate" v-show="showFlag.calculate">
-            <Calculate />
-          </div>
-          <div id="personal" v-show="showFlag.personal">
-            <Personal />
-          </div>
-          <div id="notice" v-show="showFlag.notice">
-            <Notice />
-          </div>
-          <div id="password" v-show="showFlag.password">
-            <passwordModify />
-          </div>
+          <div id="college" v-show="showFlag.college"><College /></div>
+          <div id="swiper" v-show="showFlag.swiper"><SwipperImg /></div>
+          <div id="major" v-show="showFlag.major"><Major /></div>
+          <div id="hot" v-show="showFlag.hot"><Hot /></div>
+          <div id="mbti" v-show="showFlag.mbti"><MBTI /></div>
+          <div id="plan" v-show="showFlag.plan"><Plan /></div>
+          <div id="reporting" v-show="showFlag.reporting"><Reporting /></div>
+          <div id="news" v-show="showFlag.news"><News /></div>
+          <div id="calculate" v-show="showFlag.calculate"><Calculate /></div>
+          <div id="personal" v-show="showFlag.personal"><Personal /></div>
+          <div id="notice" v-show="showFlag.notice"><Notice /></div>
+          <div id="password" v-show="showFlag.password"><passwordModify /></div>
         </el-main>
       </el-container>
     </el-container>
@@ -155,11 +130,10 @@ export default {
     Hot: () => import("./components/Hot.vue"),
     MBTI: () => import("./components/Mbti.vue"),
     Plan: () => import("./components/Plan.vue"),
-    News: () => import('./components/News.vue'),
+    News: () => import("./components/News.vue"),
     Calculate: () => import("./components/Calculate.vue"),
     Personal: () => import("./components/Personal.vue"),
-    Notice: () => import('./components/Notice.vue'),
-    // Uerinfoget: () => import('./components/Uerinfoget.vue'),
+    Notice: () => import("./components/Notice.vue"),
     Reporting: () => import("./components/Reporting.vue"),
     passwordModify: () => import("./components/Password.vue"),
   },
